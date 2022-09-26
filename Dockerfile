@@ -1,7 +1,6 @@
-FROM python:3-alpine
-WORKDIR /usr/src/app
-EXPOSE 8000
-COPY requirements.txt .
-RUN pip install -qr requirements.txt
-COPY server.py .
-CMD ["python3", "./server.py"]
+FROM openjdk:8-jdk-alpine
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
